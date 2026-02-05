@@ -3,35 +3,28 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { margin: 0; overflow: hidden; background: transparent; }
+        /* We change 'hidden' to 'visible' here just in case, 
+           but we keep the background transparent */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            overflow: visible; 
+            background: transparent; 
+        }
     </style>
 </head>
 <body>
     <script>
         window.onload = function() {
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-
-            (function frame() {
-              var timeLeft = animationEnd - Date.now();
-              if (timeLeft <= 0) return;
-
-              confetti({
-                particleCount: 1,
-                startVelocity: 0,
-                ticks: 200,
-                origin: {
-                  x: Math.random(),
-                  // Since it's trapped in a box, we start them at the top
-                  y: Math.random() - 0.2 
-                },
+            // We make the confetti fire from the BOTTOM of our large box
+            // so it shoots UP into the 'Congratulations' area.
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 1 }, // Fires from the very bottom of the iframe
                 colors: ['#800000', '#FF69B4'],
-                // This makes the confetti larger so it fills the 'trapped' space
-                scalar: 2 
-              });
-
-              requestAnimationFrame(frame);
-            }());
+                scalar: 1.2
+            });
         };
     </script>
 </body>

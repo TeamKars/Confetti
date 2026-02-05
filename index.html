@@ -23,36 +23,75 @@ canvas {
     </style>
 </head>
 <body>
-    <script>
-        window.onload = function() {
-            var duration = 4 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#800000', '#FF69B4'] };
 
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
+<script>
+window.onload = function () {
 
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
+  // Create fullscreen confetti canvas
+  var myCanvas = document.createElement('canvas');
+  document.body.appendChild(myCanvas);
 
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+  myCanvas.style.position = 'fixed';
+  myCanvas.style.top = '0';
+  myCanvas.style.left = '0';
+  myCanvas.style.width = '100%';
+  myCanvas.style.height = '100%';
+  myCanvas.style.pointerEvents = 'none';
+  myCanvas.style.zIndex = '1';
 
-                var particleCount = 50 * (timeLeft / duration);
-                // Fire from two sides to fill the width of the Rise block
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } 
-                }));
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } 
-                }));
-            }, 250);
-        };
-    </script>
+  var myConfetti = confetti.create(myCanvas, {
+    resize: true,
+    useWorker: true
+  });
+
+  var duration = 4 * 1000;
+  var animationEnd = Date.now() + duration;
+
+  var defaults = {
+    startVelocity: 30,
+    spread: 360,
+    ticks: 60,
+    colors: ['#800000', '#FF69B4']
+  };
+
+  function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  var interval = setInterval(function () {
+
+    var timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      return;
+    }
+
+    var particleCount = 50 * (timeLeft / duration);
+
+    // Left side
+    myConfetti(Object.assign({}, defaults, {
+      particleCount,
+      origin: {
+        x: randomInRange(0.1, 0.3),
+        y: Math.random() - 0.2
+      }
+    }));
+
+    // Right side
+    myConfetti(Object.assign({}, defaults, {
+      particleCount,
+      origin: {
+        x: randomInRange(0.7, 0.9),
+        y: Math.random() - 0.2
+      }
+    }));
+
+  }, 250);
+};
+</script>
+
 </body>
 </html>
+
 

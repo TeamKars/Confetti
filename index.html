@@ -3,26 +3,45 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        /* This hides the scrollbars and makes the background invisible */
-        body, html { margin: 0; padding: 0; overflow: hidden; background: transparent; }
-        #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            overflow: visible !important; 
+            background: transparent; 
+        }
+        /* This is the magic: we force the canvas to be huge */
+        canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw !important; 
+            height: 100vh !important; 
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
     <script>
         window.onload = function() {
-            const canvas = document.getElementById('canvas');
-            // This 'resize: true' is the secret—it forces the confetti to the window size
-            const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
-            
-            myConfetti({
-                particleCount: 200,
-                spread: 160,
-                origin: { y: 0.6 },
-                colors: ['#800000', '#FF69B4']
-            });
+            // We fire multiple bursts to ensure it covers the screen
+            var count = 200;
+            var defaults = { origin: { y: 0.7 }, zIndex: 9999, colors: ['#800000', '#FF69B4'] };
+
+            function fire(particleRatio, opts) {
+              confetti(Object.assign({}, defaults, opts, {
+                particleCount: Math.floor(count * particleRatio)
+              }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
         };
     </script>
 </body>
 </html>
+

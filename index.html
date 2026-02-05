@@ -3,49 +3,38 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        /* We make the internal body huge so the confetti has 'room' to fly */
-        body, html { 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: visible; 
-            background: transparent; 
-        }
+        body { margin: 0; overflow: hidden; background: transparent; }
     </style>
 </head>
 <body>
     <script>
         window.onload = function() {
-            // We fire the confetti multiple times
-            // Since we can't 'break out' of the iframe easily, 
-            // we use a high 'scalar' to make the particles bigger and 
-            // 'gravity' settings to make them float across the screen.
-            var end = Date.now() + (3 * 1000);
-            var colors = ['#800000', '#FF69B4'];
+            var duration = 4 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: ['#800000', '#FF69B4'] };
 
-            (function frame() {
-              confetti({
-                particleCount: 2,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors,
-                ticks: 300 // This keeps them on screen longer
-              });
-              confetti({
-                particleCount: 2,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors,
-                ticks: 300
-              });
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
 
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // Fire from two sides to fill the width of the Rise block
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } 
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } 
+                }));
+            }, 250);
         };
     </script>
 </body>

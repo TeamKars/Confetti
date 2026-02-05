@@ -3,8 +3,8 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        /* This makes the iframe's internal world invisible */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+        /* This hides the scrollbars and makes the background invisible */
+        body, html { margin: 0; padding: 0; overflow: hidden; background: transparent; }
         #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; }
     </style>
 </head>
@@ -13,15 +13,16 @@
     <script>
         window.onload = function() {
             const canvas = document.getElementById('canvas');
-            // This 'myConfetti' instance is told specifically to use the full screen canvas
+            // This 'resize: true' is the secret—it forces the confetti to the window size
             const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
             
             myConfetti({
                 particleCount: 200,
-                spread: 90,
-                origin: { y: 0.5 },
+                spread: 160,
+                origin: { y: 0.6 },
                 colors: ['#800000', '#FF69B4']
             });
         };
     </script>
 </body>
+</html>
